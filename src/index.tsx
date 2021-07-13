@@ -1,4 +1,3 @@
-/* eslint-disable sort-keys */
 import React, { useState } from 'react'
 import {
   Keyboard,
@@ -12,28 +11,29 @@ import {
   View,
 } from 'react-native'
 
-import Header from './components/header'
-import Task from './components/task'
+import { Header } from './components/Header'
+import { Task } from './components/Task'
+import { Color } from './styles/Color'
 
-interface Task {
+export interface TaskType {
   title: string
   description: string
   isChecked: boolean
 }
 
-export default function App() {
-  const [task, setTask] = useState<Task>({
+export const App = () => {
+  const [task, setTask] = useState<TaskType>({
     description: '',
-    title: '',
     isChecked: false,
+    title: '',
   })
-  const [taskItems, setTaskItems] = useState<Task[]>([])
+  const [taskItems, setTaskItems] = useState<TaskType[]>([])
 
   const handleAddTask = () => {
     Keyboard.dismiss()
     if (task.description && task.title) {
       setTaskItems([...taskItems, task])
-      setTask({ description: '', title: '', isChecked: false })
+      setTask({ description: '', isChecked: false, title: '' })
     }
   }
 
@@ -88,7 +88,7 @@ export default function App() {
           </View>
           <TouchableOpacity
             style={styles.clearButton}
-            onPress={() => hanldeClearAllSelectedTasks()}>
+            onPress={hanldeClearAllSelectedTasks}>
             <Text style={styles.clearButtonText}>CLEAR ALL TASKS</Text>
           </TouchableOpacity>
         </View>
@@ -102,26 +102,28 @@ const styles = StyleSheet.create({
     alignItems: 'center',
   },
   clearButtonText: {
-    color: 'rgb(255, 25, 123)',
     alignItems: 'center',
-    margin: 20,
+    color: Color.Pink,
     fontWeight: 'bold',
+    margin: 20,
   },
   container: {
-    backgroundColor: 'rgb(248, 248, 248)',
+    backgroundColor: Color.LightGrey,
     flex: 1,
   },
-  inputTitle: {
-    backgroundColor: '#fff',
-    borderBottomColor: 'rgb(255, 25, 123)',
-    borderBottomWidth: 1,
-    fontSize: 20,
-    padding: 15,
+  inputDescription: {
+    alignItems: 'flex-start',
+    backgroundColor: Color.White,
+    padding: '5%',
+    paddingBottom: '20%',
     width: '100%',
   },
-  inputDescription: {
-    backgroundColor: '#fff',
-    padding: 10,
+  inputTitle: {
+    backgroundColor: Color.White,
+    borderBottomColor: Color.Pink,
+    borderBottomWidth: 1,
+    fontSize: 20,
+    padding: '5%',
     width: '100%',
   },
   items: {

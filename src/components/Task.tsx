@@ -1,10 +1,20 @@
 import React from 'react'
 import { Image, StyleSheet, Text, TouchableOpacity, View } from 'react-native'
 
-export default function Task({
+import CheckboxActive from '../assets/iconCheckboxActive.png'
+import CheckboxInactive from '../assets/iconCheckboxInactive.png'
+import { TaskType } from '../index'
+import { Color } from '../styles/Color'
+
+interface Props {
+  task: TaskType
+  handleClickCheckbox(): void
+}
+
+export const Task: React.FunctionComponent<Props> = ({
   task: { title, description, isChecked },
   handleClickCheckbox,
-}: any) {
+}) => {
   return (
     <View style={styles.item}>
       <View style={styles.itemLeft}>
@@ -14,11 +24,7 @@ export default function Task({
       <TouchableOpacity onPress={handleClickCheckbox}>
         <Image
           style={styles.checkbox}
-          source={
-            isChecked
-              ? require('../assets/iconCheckboxActive.png')
-              : require('../assets/iconCheckboxInactive.png')
-          }></Image>
+          source={isChecked ? CheckboxActive : CheckboxInactive}></Image>
       </TouchableOpacity>
     </View>
   )
@@ -28,8 +34,8 @@ const styles = StyleSheet.create({
   checkbox: {},
   item: {
     alignItems: 'center',
-    backgroundColor: '#FFF',
-    borderColor: '#C0C0C0',
+    backgroundColor: Color.White,
+    borderColor: Color.MidGrey,
     borderWidth: 0.5,
     flexDirection: 'row',
     justifyContent: 'space-between',
@@ -40,8 +46,8 @@ const styles = StyleSheet.create({
     justifyContent: 'flex-start',
   },
   taskDescription: {
-    color: 'rgb(149, 149, 149)',
+    color: Color.Grey,
     fontSize: 14,
   },
-  taskTitle: { color: 'black', fontSize: 18 },
+  taskTitle: { color: Color.Black, fontSize: 18 },
 })
