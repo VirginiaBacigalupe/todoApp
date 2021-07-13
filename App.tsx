@@ -1,115 +1,144 @@
-/**
- * Sample React Native App
- * https://github.com/facebook/react-native
- *
- * Generated with the TypeScript template
- * https://github.com/react-native-community/react-native-template-typescript
- *
- * @format
- */
-
-import React from 'react';
+/* eslint-disable sort-keys */
+import React, { useState } from 'react'
 import {
-  SafeAreaView,
+  Keyboard,
+  KeyboardAvoidingView,
+  Platform,
   ScrollView,
-  StatusBar,
   StyleSheet,
   Text,
-  useColorScheme,
+  TextInput,
+  TouchableOpacity,
   View,
-} from 'react-native';
+} from 'react-native'
 
-import {
-  Colors,
-  DebugInstructions,
-  Header,
-  LearnMoreLinks,
-  ReloadInstructions,
-} from 'react-native/Libraries/NewAppScreen';
+import Header from './components/header'
+import Task from './components/task'
 
-const Section: React.FC<{
-  title: string;
-}> = ({children, title}) => {
-  const isDarkMode = useColorScheme() === 'dark';
-  return (
-    <View style={styles.sectionContainer}>
-      <Text
-        style={[
-          styles.sectionTitle,
-          {
-            color: isDarkMode ? Colors.white : Colors.black,
-          },
-        ]}>
-        {title}
-      </Text>
-      <Text
-        style={[
-          styles.sectionDescription,
-          {
-            color: isDarkMode ? Colors.light : Colors.dark,
-          },
-        ]}>
-        {children}
-      </Text>
-    </View>
-  );
-};
+interface Task {
+  title: string
+  description: string
+  isChecked: boolean
+}
 
-const App = () => {
-  const isDarkMode = useColorScheme() === 'dark';
+export default function App() {
+  const [task, setTask] = useState<Task>({
+    description: '',
+    title: '',
+    isChecked: false,
+  })
+  const [taskItems, setTaskItems] = useState<Task[]>([])
 
-  const backgroundStyle = {
-    backgroundColor: isDarkMode ? Colors.darker : Colors.lighter,
-  };
+  const handleAddTask = () => {
+    Keyboard.dismiss()
+    if (task.description && task.title) {
+      setTaskItems([...taskItems, task])
+      setTask({ description: '', title: '', isChecked: false })
+    }
+  }
+
+  const handleClickCheckbox = (idTask: string) => {
+    setTaskItems(
+      taskItems.map(item => {
+        return item.title === idTask
+          ? { ...item, isChecked: !item.isChecked }
+          : item
+      }),
+    )
+  }
+
+  const hanldeClearAllSelectedTasks = () => {
+    const newTaskList = taskItems.filter(item => item.isChecked === false)
+    setTaskItems(newTaskList)
+  }
 
   return (
-    <SafeAreaView style={backgroundStyle}>
-      <StatusBar barStyle={isDarkMode ? 'light-content' : 'dark-content'} />
-      <ScrollView
-        contentInsetAdjustmentBehavior="automatic"
-        style={backgroundStyle}>
-        <Header />
-        <View
-          style={{
-            backgroundColor: isDarkMode ? Colors.black : Colors.white,
-          }}>
-          <Section title="Step One">
-            Edit <Text style={styles.highlight}>App.js</Text> to change this
-            screen and then come back to see your edits.
-          </Section>
-          <Section title="See Your Changes">
-            <ReloadInstructions />
-          </Section>
-          <Section title="Debug">
-            <DebugInstructions />
-          </Section>
-          <Section title="Learn More">
-            Read the docs to discover what to do next:
-          </Section>
-          <LearnMoreLinks />
+    <View style={styles.container}>
+      <Header handleAddTask={handleAddTask} />
+      <KeyboardAvoidingView
+        behavior={Platform.OS === 'ios' ? 'padding' : 'height'}
+        style={styles.writeTaskWrapper}>
+        <TextInput
+          style={styles.inputTitle}
+          placeholder={'Task title'}
+          value={task.title}
+          onChangeText={text => setTask({ ...task, title: text })}
+        />
+        <TextInput
+          style={styles.inputDescription}
+          placeholder={'Task description'}
+          value={task.description}
+          onChangeText={text => setTask({ ...task, description: text })}
+        />
+      </KeyboardAvoidingView>
+      <ScrollView style={styles.scrollView} keyboardShouldPersistTaps="handled">
+        {/* Tasks list */}
+        <View style={styles.tasksWrapper}>
+          <View style={styles.items}>
+            {taskItems.map((item, index) => {
+              return (
+                <View key={index}>
+                  <Task
+                    task={item}
+                    handleClickCheckbox={() => handleClickCheckbox(item.title)}
+                  />
+                </View>
+              )
+            })}
+          </View>
+          <TouchableOpacity
+            style={styles.clearButton}
+            onPress={() => hanldeClearAllSelectedTasks()}>
+            <Text style={styles.clearButtonText}>CLEAR ALL TASKS</Text>
+          </TouchableOpacity>
         </View>
       </ScrollView>
-    </SafeAreaView>
-  );
-};
+    </View>
+  )
+}
 
 const styles = StyleSheet.create({
-  sectionContainer: {
-    marginTop: 32,
-    paddingHorizontal: 24,
+  clearButton: {
+    alignItems: 'center',
+  },
+  clearButtonText: {
+    color: 'rgb(255, 25, 123)',
+    alignItems: 'center',
+    margin: 20,
+    fontWeight: 'bold',
+  },
+  container: {
+    backgroundColor: 'rgb(248, 248, 248)',
+    flex: 1,
+  },
+  inputTitle: {
+    backgroundColor: '#fff',
+    borderBottomColor: 'rgb(255, 25, 123)',
+    borderBottomWidth: 1,
+    fontSize: 20,
+    padding: 15,
+    width: '100%',
+  },
+  inputDescription: {
+    backgroundColor: '#fff',
+    padding: 10,
+    width: '100%',
+  },
+  items: {
+    marginTop: 30,
+  },
+  scrollView: {
+    flexGrow: 1,
   },
   sectionTitle: {
     fontSize: 24,
-    fontWeight: '600',
+    fontWeight: 'bold',
   },
-  sectionDescription: {
-    marginTop: 8,
-    fontSize: 18,
-    fontWeight: '400',
+  tasksWrapper: {},
+  writeTaskWrapper: {
+    alignItems: 'center',
+    flexDirection: 'column',
+    justifyContent: 'space-around',
+    width: '100%',
   },
-  highlight: {
-    fontWeight: '700',
-  },
-});
-
-export default App;
+})
