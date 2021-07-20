@@ -1,10 +1,10 @@
 import React from 'react'
 import { Image, StyleSheet, Text, TouchableOpacity, View } from 'react-native'
 
-import CheckboxActive from '../assets/iconCheckboxActive.png'
-import CheckboxInactive from '../assets/iconCheckboxInactive.png'
-import { TaskType } from '../index'
-import { Color } from '../styles/Color'
+import CheckboxActive from '../../icons/iconCheckboxActive.png'
+import CheckboxInactive from '../../icons/iconCheckboxInactive.png'
+import { TaskType } from '../../index'
+import { Color } from '../../styles/Color'
 
 interface Props {
   task: TaskType
@@ -19,19 +19,21 @@ export const Task: React.FunctionComponent<Props> = ({
     <View style={styles.item}>
       <View style={styles.itemLeft}>
         <Text style={styles.taskTitle}>{title}</Text>
-        <Text style={styles.taskDescription}>{description}</Text>
+        <Text
+          style={styles.taskDescription}
+          numberOfLines={1}
+          ellipsizeMode="tail">
+          {description}
+        </Text>
       </View>
-      <TouchableOpacity onPress={handleClickCheckbox}>
-        <Image
-          style={styles.checkbox}
-          source={isChecked ? CheckboxActive : CheckboxInactive}></Image>
+      <TouchableOpacity style={styles.itemRight} onPress={handleClickCheckbox}>
+        <Image source={isChecked ? CheckboxActive : CheckboxInactive}></Image>
       </TouchableOpacity>
     </View>
   )
 }
 
 const styles = StyleSheet.create({
-  checkbox: {},
   item: {
     alignItems: 'center',
     backgroundColor: Color.White,
@@ -44,10 +46,15 @@ const styles = StyleSheet.create({
   itemLeft: {
     flexDirection: 'column',
     justifyContent: 'flex-start',
+    maxWidth: '80%',
+  },
+  itemRight: {
+    marginRight: 10,
   },
   taskDescription: {
     color: Color.Grey,
     fontSize: 14,
+    marginTop: 5,
   },
   taskTitle: { color: Color.Black, fontSize: 18 },
 })
