@@ -1,21 +1,24 @@
 import { RouteProp, useNavigation, useRoute } from '@react-navigation/native'
 import React from 'react'
 import { StyleSheet, Text, View } from 'react-native'
+import { useDispatch } from 'react-redux'
 
 import { SettingsStackParamsList } from '..'
 import { PinkButton } from '../components/PinkButton'
 import { Routes } from '../routes/Routes'
+import { checkTodo } from '../store/slices/todoSlice'
 import { Color } from '../styles/Color'
 
 export const Details: React.FunctionComponent = () => {
   const { params } =
     useRoute<RouteProp<SettingsStackParamsList, Routes.Details>>()
 
-  const { navigate } = useNavigation()
+  const navigation = useNavigation()
+  const dispatch = useDispatch()
 
-  const handleClick = () => {
-    params.handleClick
-    navigate(Routes.Home)
+  const handleClick = (idTask: string, isChecked: boolean) => {
+    dispatch(checkTodo({ id: idTask, isChecked: !isChecked }))
+    navigation.goBack()
   }
 
   return (
@@ -27,7 +30,7 @@ export const Details: React.FunctionComponent = () => {
       <Text style={styles.taskDescription}>{params.task.description}</Text>
       <PinkButton
         title={params.task.isChecked ? 'UNMARK' : 'MARK AS DONE'}
-        onPress={handleClick}
+        onPress={() => handleClick(params.task.id, params.task.isChecked)}
       />
     </View>
   )

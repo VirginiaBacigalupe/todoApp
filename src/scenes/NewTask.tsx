@@ -1,4 +1,4 @@
-import { RouteProp, useNavigation, useRoute } from '@react-navigation/native'
+import { useNavigation } from '@react-navigation/native'
 import React, { useState } from 'react'
 import {
   KeyboardAvoidingView,
@@ -8,18 +8,19 @@ import {
   TextInput,
   TouchableOpacity,
 } from 'react-native'
+import { useDispatch } from 'react-redux'
 
-import { SettingsStackParamsList, TaskType } from '../index'
-import { Routes } from '../routes/Routes'
+import { TaskType } from '../index'
+import { addTodo } from '../store/slices/todoSlice'
 import { Color } from '../styles/Color'
 
-export const NewTask: React.FunctionComponent = () => {
-  const { params } =
-    useRoute<RouteProp<SettingsStackParamsList, Routes.NewTask>>()
+export const NewTask = () => {
   const navigation = useNavigation()
+  const dispatch = useDispatch()
 
   const [newTask, setNewTask] = useState<TaskType>({
     description: '',
+    id: '',
     isChecked: false,
     title: '',
   })
@@ -28,9 +29,11 @@ export const NewTask: React.FunctionComponent = () => {
     navigation.goBack()
   }
 
-  const handleAddTask = (newTask: TaskType) => {
-    params.addTask(newTask)
-    navigation.goBack()
+  const handleAddTask = (task: TaskType) => {
+    if (task.description && task.title) {
+      dispatch(addTodo(task))
+      navigation.goBack()
+    }
   }
 
   React.useEffect(() => {

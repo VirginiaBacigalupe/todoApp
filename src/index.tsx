@@ -6,22 +6,24 @@ import { createStackNavigator } from '@react-navigation/stack'
 import React from 'react'
 import { StyleSheet } from 'react-native'
 import LocalizedStrings from 'react-native-localization'
+import { Provider } from 'react-redux'
 
 import { Routes } from './routes/Routes'
 import { Details } from './scenes/Details'
 import { Home } from './scenes/Home'
 import { NewTask } from './scenes/NewTask'
+import { store } from './store'
 import { Color } from './styles/Color'
 
 export interface TaskType {
+  id: string
   title: string
   description: string
   isChecked: boolean
 }
 
 export type SettingsStackParamsList = {
-  [Routes.Details]: { task: TaskType; handleClick: () => void }
-  [Routes.NewTask]: { addTask: (task: TaskType) => void }
+  [Routes.Details]: { task: TaskType }
 }
 
 export const App = () => {
@@ -33,44 +35,46 @@ export const App = () => {
   })
 
   return (
-    <NavigationContainer>
-      <Stack.Navigator initialRouteName={Routes.Home}>
-        <Stack.Screen
-          name={Routes.Home}
-          component={Home}
-          options={() => ({
-            headerStyle: styles.header,
-            headerTintColor: Color.White,
-            headerTitle: strings.text,
-            headerTitleStyle: {
-              fontWeight: 'bold',
-            },
-          })}
-        />
-        <Stack.Screen
-          name={Routes.NewTask}
-          component={NewTask}
-          options={() => ({
-            headerStyle: styles.header,
-            headerTintColor: Color.White,
-            headerTitleStyle: {
-              fontWeight: 'bold',
-            },
-          })}
-        />
-        <Stack.Screen
-          name={Routes.Details}
-          component={Details}
-          options={() => ({
-            headerStyle: styles.header,
-            headerTintColor: Color.White,
-            headerTitleStyle: {
-              fontWeight: 'bold',
-            },
-          })}
-        />
-      </Stack.Navigator>
-    </NavigationContainer>
+    <Provider store={store}>
+      <NavigationContainer>
+        <Stack.Navigator initialRouteName={Routes.Home}>
+          <Stack.Screen
+            name={Routes.Home}
+            component={Home}
+            options={() => ({
+              headerStyle: styles.header,
+              headerTintColor: Color.White,
+              headerTitle: strings.text,
+              headerTitleStyle: {
+                fontWeight: 'bold',
+              },
+            })}
+          />
+          <Stack.Screen
+            name={Routes.NewTask}
+            component={NewTask}
+            options={() => ({
+              headerStyle: styles.header,
+              headerTintColor: Color.White,
+              headerTitleStyle: {
+                fontWeight: 'bold',
+              },
+            })}
+          />
+          <Stack.Screen
+            name={Routes.Details}
+            component={Details}
+            options={() => ({
+              headerStyle: styles.header,
+              headerTintColor: Color.White,
+              headerTitleStyle: {
+                fontWeight: 'bold',
+              },
+            })}
+          />
+        </Stack.Navigator>
+      </NavigationContainer>
+    </Provider>
   )
 }
 

@@ -1,5 +1,5 @@
 import { useNavigation } from '@react-navigation/native'
-import React, { useState } from 'react'
+import React from 'react'
 import {
   FlatList,
   StyleSheet,
@@ -7,39 +7,27 @@ import {
   TouchableOpacity,
   View,
 } from 'react-native'
+import { useDispatch } from 'react-redux'
 
-import { TaskType } from '../..'
 import { PinkButton } from '../../components/PinkButton'
 import { Routes } from '../../routes/Routes'
+import { useAppSelector } from '../../store/hooks'
+import { checkTodo, cleanCkeckedTodos } from '../../store/slices/todoSlice'
 import { Color } from '../../styles/Color'
 import { Task } from './Task'
 
 export const Home = () => {
   const navigation = useNavigation()
-  const [taskItems, setTaskItems] = useState<TaskType[]>([])
+  const dispatch = useDispatch()
 
-  const handleAddTask = (task: TaskType) => {
-    console.log('la task nueva que llega ', task)
-    console.log('lista de task antes de meter la nueva ', taskItems)
-    if (task.description && task.title) {
-      setTaskItems(taskItems => [...taskItems, task])
-    }
-    console.log('lista de tasks dspues de meter la nueva ', taskItems)
-  }
+  const taskItems = useAppSelector(state => state.todo.todoList)
 
-  const handleClickCheckbox = (idTask: string) => {
-    setTaskItems(
-      taskItems.map(item => {
-        return item.title === idTask
-          ? { ...item, isChecked: !item.isChecked }
-          : item
-      }),
-    )
+  const handleClickCheckbox = (idTask: string, isChecked: boolean) => {
+    dispatch(checkTodo({ id: idTask, isChecked: !isChecked }))
   }
 
   const hanldeClearAllSelectedTasks = () => {
-    const newTaskList = taskItems.filter(item => item.isChecked === false)
-    setTaskItems(newTaskList)
+    dispatch(cleanCkeckedTodos())
   }
 
   React.useLayoutEffect(() => {
@@ -48,11 +36,7 @@ export const Home = () => {
       headerRight: () => (
         <TouchableOpacity
           style={styles.rightButton}
-          onPress={() =>
-            navigation.navigate(Routes.NewTask, {
-              addTask: handleAddTask,
-            })
-          }>
+          onPress={() => navigation.navigate(Routes.NewTask)}>
           <Text style={styles.headerTitle}>+</Text>
         </TouchableOpacity>
       ),
@@ -68,18 +52,19 @@ export const Home = () => {
         contentContainerStyle={{ flex: 1 }}
         style={styles.flatList}
         data={taskItems}
-        keyExtractor={item => item.title}
+        //keyExtractor={item => item.id}
         renderItem={task => (
           <TouchableOpacity
             onPress={() =>
               navigation.navigate(Routes.Details, {
-                handleClick: handleClickCheckbox(task.item.title),
                 task: task.item,
               })
             }>
             <Task
               task={task.item}
-              handleClickCheckbox={() => handleClickCheckbox(task.item.title)}
+              handleClickCheckbox={() =>
+                handleClickCheckbox(task.item.id, task.item.isChecked)
+              }
             />
           </TouchableOpacity>
         )}
