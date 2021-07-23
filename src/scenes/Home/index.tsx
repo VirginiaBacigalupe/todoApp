@@ -12,19 +12,16 @@ import { useDispatch } from 'react-redux'
 import { PinkButton } from '../../components/PinkButton'
 import { Routes } from '../../routes/Routes'
 import { useAppSelector } from '../../store/hooks'
-import { checkTodo, cleanCkeckedTodos } from '../../store/slices/todoSlice'
+import { cleanCkeckedTodos } from '../../store/slices/todoSlice'
+import { strings } from '../../strings'
 import { Color } from '../../styles/Color'
-import { Task } from './Task'
+import { ListItem } from './ListItem'
 
 export const Home = () => {
   const navigation = useNavigation()
   const dispatch = useDispatch()
 
   const taskItems = useAppSelector(state => state.todo.todoList)
-
-  const handleClickCheckbox = (idTask: string, isChecked: boolean) => {
-    dispatch(checkTodo({ id: idTask, isChecked: !isChecked }))
-  }
 
   const hanldeClearAllSelectedTasks = () => {
     dispatch(cleanCkeckedTodos())
@@ -47,30 +44,16 @@ export const Home = () => {
     <View style={styles.container}>
       <FlatList
         ListEmptyComponent={
-          <Text style={styles.inputTitle}>The tasks list is empty</Text>
+          <Text style={styles.inputTitle}>{strings.emptyListText}</Text>
         }
         contentContainerStyle={{ flex: 1 }}
         style={styles.flatList}
         data={taskItems}
-        //keyExtractor={item => item.id}
-        renderItem={task => (
-          <TouchableOpacity
-            onPress={() =>
-              navigation.navigate(Routes.Details, {
-                task: task.item,
-              })
-            }>
-            <Task
-              task={task.item}
-              handleClickCheckbox={() =>
-                handleClickCheckbox(task.item.id, task.item.isChecked)
-              }
-            />
-          </TouchableOpacity>
-        )}
+        keyExtractor={item => item.id}
+        renderItem={elem => <ListItem task={elem.item} />}
         ListFooterComponent={
           <PinkButton
-            title={'CLEAR ALL DONE'}
+            title={strings.clearAllButton}
             onPress={hanldeClearAllSelectedTasks}
           />
         }

@@ -5,7 +5,6 @@ import { NavigationContainer } from '@react-navigation/native'
 import { createStackNavigator } from '@react-navigation/stack'
 import React from 'react'
 import { StyleSheet } from 'react-native'
-import LocalizedStrings from 'react-native-localization'
 import { Provider } from 'react-redux'
 
 import { Routes } from './routes/Routes'
@@ -13,6 +12,7 @@ import { Details } from './scenes/Details'
 import { Home } from './scenes/Home'
 import { NewTask } from './scenes/NewTask'
 import { store } from './store'
+import { strings } from './strings'
 import { Color } from './styles/Color'
 
 export interface TaskType {
@@ -28,11 +28,6 @@ export type SettingsStackParamsList = {
 
 export const App = () => {
   const Stack = createStackNavigator()
-  const strings = new LocalizedStrings({
-    'en-US': {
-      text: 'Todo',
-    },
-  })
 
   return (
     <Provider store={store}>
@@ -44,7 +39,7 @@ export const App = () => {
             options={() => ({
               headerStyle: styles.header,
               headerTintColor: Color.White,
-              headerTitle: strings.text,
+              headerTitle: strings.initialHeaderTitle,
               headerTitleStyle: {
                 fontWeight: 'bold',
               },

@@ -14,24 +14,22 @@ interface Props {
 export const Task: React.FunctionComponent<Props> = ({
   task: { title, description, isChecked },
   handleClickCheckbox,
-}) => {
-  return (
-    <View style={styles.item}>
-      <View style={styles.itemLeft}>
-        <Text style={styles.taskTitle}>{title}</Text>
-        <Text
-          style={styles.taskDescription}
-          numberOfLines={1}
-          ellipsizeMode="tail">
-          {description}
-        </Text>
-      </View>
-      <TouchableOpacity style={styles.itemRight} onPress={handleClickCheckbox}>
-        <Image source={isChecked ? CheckboxActive : CheckboxInactive}></Image>
-      </TouchableOpacity>
+}) => (
+  <View style={styles.item}>
+    <View style={styles.itemLeft}>
+      <Text style={styles.taskTitle}>{title}</Text>
+      <Text
+        style={styles.taskDescription}
+        numberOfLines={1}
+        ellipsizeMode="tail">
+        {description}
+      </Text>
     </View>
-  )
-}
+    <TouchableOpacity style={styles.itemRight} onPress={handleClickCheckbox}>
+      <Image source={isChecked ? CheckboxActive : CheckboxInactive}></Image>
+    </TouchableOpacity>
+  </View>
+)
 
 const styles = StyleSheet.create({
   item: {

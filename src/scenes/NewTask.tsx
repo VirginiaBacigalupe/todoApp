@@ -10,27 +10,24 @@ import {
 } from 'react-native'
 import { useDispatch } from 'react-redux'
 
-import { TaskType } from '../index'
 import { addTodo } from '../store/slices/todoSlice'
+import { strings } from '../strings'
 import { Color } from '../styles/Color'
 
 export const NewTask = () => {
   const navigation = useNavigation()
   const dispatch = useDispatch()
 
-  const [newTask, setNewTask] = useState<TaskType>({
-    description: '',
-    id: '',
-    isChecked: false,
-    title: '',
-  })
+  const [description, setDescription] = useState('')
+  const [title, setTitle] = useState('')
 
   const handleCancel = () => {
     navigation.goBack()
   }
 
-  const handleAddTask = (task: TaskType) => {
-    if (task.description && task.title) {
+  const handleAddTask = (description: string, title: string) => {
+    if (description && title) {
+      const task = { description, title }
       dispatch(addTodo(task))
       navigation.goBack()
     }
@@ -41,20 +38,20 @@ export const NewTask = () => {
       // eslint-disable-next-line react/display-name
       headerLeft: () => (
         <TouchableOpacity onPress={() => handleCancel()}>
-          <Text style={styles.leftButton}>Cancel</Text>
+          <Text style={styles.leftButton}>{strings.cancelButton}</Text>
         </TouchableOpacity>
       ),
       // eslint-disable-next-line react/display-name
       headerRight: () => (
         <TouchableOpacity
           onPress={() => {
-            handleAddTask(newTask)
+            handleAddTask(description, title)
           }}>
-          <Text style={styles.rightButton}>Save</Text>
+          <Text style={styles.rightButton}>{strings.saveButton}</Text>
         </TouchableOpacity>
       ),
     })
-  }, [navigation, newTask])
+  }, [navigation, description, title])
 
   return (
     <KeyboardAvoidingView
@@ -63,14 +60,14 @@ export const NewTask = () => {
       <TextInput
         style={styles.inputTitle}
         placeholder={'Task title'}
-        value={newTask.title}
-        onChangeText={text => setNewTask({ ...newTask, title: text })}
+        value={title}
+        onChangeText={text => setTitle(text)}
       />
       <TextInput
         style={styles.inputDescription}
         placeholder={'Task description'}
-        value={newTask.description}
-        onChangeText={text => setNewTask({ ...newTask, description: text })}
+        value={description}
+        onChangeText={text => setDescription(text)}
       />
     </KeyboardAvoidingView>
   )

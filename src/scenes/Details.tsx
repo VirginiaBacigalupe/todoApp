@@ -7,6 +7,7 @@ import { SettingsStackParamsList } from '..'
 import { PinkButton } from '../components/PinkButton'
 import { Routes } from '../routes/Routes'
 import { checkTodo } from '../store/slices/todoSlice'
+import { strings } from '../strings'
 import { Color } from '../styles/Color'
 
 export const Details: React.FunctionComponent = () => {
@@ -24,12 +25,14 @@ export const Details: React.FunctionComponent = () => {
   return (
     <View style={styles.container}>
       <Text style={styles.statusText}>
-        {params.task.isChecked ? 'Done' : 'Not done'}
+        {params.task.isChecked ? strings.done : strings.notDone}
       </Text>
       <Text style={styles.taskTitle}>{params.task.title}</Text>
       <Text style={styles.taskDescription}>{params.task.description}</Text>
       <PinkButton
-        title={params.task.isChecked ? 'UNMARK' : 'MARK AS DONE'}
+        title={
+          params.task.isChecked ? strings.unMarkButton : strings.markButton
+        }
         onPress={() => handleClick(params.task.id, params.task.isChecked)}
       />
     </View>

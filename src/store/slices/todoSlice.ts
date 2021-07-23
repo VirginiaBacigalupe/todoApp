@@ -11,7 +11,7 @@ const todoSlice = createSlice({
       const newTodo = {
         description: action.payload.description,
         id: (idCount++).toString(),
-        isChecked: action.payload.isChecked,
+        isChecked: false,
         title: action.payload.title,
       }
       state.todoList.push(newTodo)
