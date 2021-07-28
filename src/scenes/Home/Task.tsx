@@ -12,7 +12,7 @@ interface Props {
 }
 
 export const Task: React.FunctionComponent<Props> = ({
-  task: { title, description, isChecked },
+  task: { title, description, completed },
   handleClickCheckbox,
 }) => (
   <View style={styles.item}>
@@ -26,7 +26,7 @@ export const Task: React.FunctionComponent<Props> = ({
       </Text>
     </View>
     <TouchableOpacity style={styles.itemRight} onPress={handleClickCheckbox}>
-      <Image source={isChecked ? CheckboxActive : CheckboxInactive}></Image>
+      <Image source={completed ? CheckboxActive : CheckboxInactive}></Image>
     </TouchableOpacity>
   </View>
 )

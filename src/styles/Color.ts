@@ -5,5 +5,6 @@ export enum Color {
   MidGrey = 'rgb(192, 192, 192)',
   Grey = 'rgb(149, 149, 149)',
   Pink = 'rgb(255, 25, 123)',
+  TransparentBlack = 'rgba( 0 , 0 , 0 , 0.251 )',
   White = 'rgb(255, 255, 255)',
 }

@@ -1,12 +1,12 @@
 import { RouteProp, useNavigation, useRoute } from '@react-navigation/native'
 import React from 'react'
-import { StyleSheet, Text, View } from 'react-native'
+import { StyleSheet, Text, TouchableOpacity, View } from 'react-native'
 import { useDispatch } from 'react-redux'
 
-import { SettingsStackParamsList } from '..'
+import { SettingsStackParamsList, TaskType } from '..'
 import { PinkButton } from '../components/PinkButton'
 import { Routes } from '../routes/Routes'
-import { checkTodo } from '../store/slices/todoSlice'
+import { updateTodoItem } from '../store/todos/actions'
 import { strings } from '../strings'
 import { Color } from '../styles/Color'
 
@@ -17,23 +17,40 @@ export const Details: React.FunctionComponent = () => {
   const navigation = useNavigation()
   const dispatch = useDispatch()
 
-  const handleClick = (idTask: string, isChecked: boolean) => {
-    dispatch(checkTodo({ id: idTask, isChecked: !isChecked }))
+  const handleClick = (idTask: string, completed: boolean) => {
+    dispatch(updateTodoItem({ completed: !completed, id: idTask }))
     navigation.goBack()
   }
+  const handleEditTask = (task: TaskType) => {
+    navigation.navigate(Routes.NewTask, { task })
+  }
+
+  React.useEffect(() => {
+    navigation.setOptions({
+      // eslint-disable-next-line react/display-name
+      headerRight: () => (
+        <TouchableOpacity
+          onPress={() => {
+            handleEditTask(params.task)
+          }}>
+          <Text style={styles.rightButton}>{strings.edit}</Text>
+        </TouchableOpacity>
+      ),
+    })
+  }, [navigation])
 
   return (
     <View style={styles.container}>
       <Text style={styles.statusText}>
-        {params.task.isChecked ? strings.done : strings.notDone}
+        {params.task.completed ? strings.done : strings.notDone}
       </Text>
       <Text style={styles.taskTitle}>{params.task.title}</Text>
       <Text style={styles.taskDescription}>{params.task.description}</Text>
       <PinkButton
         title={
-          params.task.isChecked ? strings.unMarkButton : strings.markButton
+          params.task.completed ? strings.unMarkButton : strings.markButton
         }
-        onPress={() => handleClick(params.task.id, params.task.isChecked)}
+        onPress={() => handleClick(params.task.id, params.task.completed)}
       />
     </View>
   )
@@ -43,6 +60,11 @@ const styles = StyleSheet.create({
   container: {
     backgroundColor: Color.White,
     padding: 15,
+  },
+  rightButton: {
+    color: Color.White,
+    fontSize: 18,
+    marginRight: 15,
   },
   statusText: {
     color: Color.Pink,

@@ -5,7 +5,7 @@ import { useDispatch } from 'react-redux'
 
 import { TaskType } from '../..'
 import { Routes } from '../../routes/Routes'
-import { checkTodo } from '../../store/slices/todoSlice'
+import { updateTodoItem } from '../../store/todos/actions'
 import { Task } from './Task'
 
 interface Props {
@@ -15,8 +15,8 @@ export const ListItem: React.FunctionComponent<Props> = ({ task }) => {
   const navigation = useNavigation()
   const dispatch = useDispatch()
 
-  const handleClickCheckbox = (idTask: string, isChecked: boolean) => {
-    dispatch(checkTodo({ id: idTask, isChecked: !isChecked }))
+  const handleClickCheckbox = (idTask: string, completed: boolean) => {
+    dispatch(updateTodoItem({ completed: !completed, id: idTask }))
   }
 
   return (
@@ -28,7 +28,7 @@ export const ListItem: React.FunctionComponent<Props> = ({ task }) => {
       }>
       <Task
         task={task}
-        handleClickCheckbox={() => handleClickCheckbox(task.id, task.isChecked)}
+        handleClickCheckbox={() => handleClickCheckbox(task.id, task.completed)}
       />
     </TouchableOpacity>
   )

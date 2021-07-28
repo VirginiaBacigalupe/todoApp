@@ -1,5 +1,5 @@
-import { useNavigation } from '@react-navigation/native'
-import React, { useState } from 'react'
+import { RouteProp, useNavigation, useRoute } from '@react-navigation/native'
+import React, { useEffect, useState } from 'react'
 import {
   KeyboardAvoidingView,
   Platform,
@@ -10,11 +10,16 @@ import {
 } from 'react-native'
 import { useDispatch } from 'react-redux'
 
-import { addTodo } from '../store/slices/todoSlice'
+import { SettingsStackParamsList } from '..'
+import { Routes } from '../routes/Routes'
+import { addTodoItem, updateTodoItem } from '../store/todos/actions'
 import { strings } from '../strings'
 import { Color } from '../styles/Color'
 
-export const NewTask = () => {
+export const NewTask: React.FunctionComponent = () => {
+  const { params } =
+    useRoute<RouteProp<SettingsStackParamsList, Routes.NewTask>>()
+
   const navigation = useNavigation()
   const dispatch = useDispatch()
 
@@ -28,10 +33,24 @@ export const NewTask = () => {
   const handleAddTask = (description: string, title: string) => {
     if (description && title) {
       const task = { description, title }
-      dispatch(addTodo(task))
+      dispatch(addTodoItem(task))
       navigation.goBack()
     }
   }
+
+  const handleEditTask = (description: string, title: string) => {
+    if (params?.task) {
+      dispatch(updateTodoItem({ description, id: params.task.id, title }))
+      navigation.navigate(Routes.Home)
+    }
+  }
+
+  useEffect(() => {
+    if (params?.task) {
+      setDescription(params.task.description)
+      setTitle(params.task.title)
+    }
+  }, [])
 
   React.useEffect(() => {
     navigation.setOptions({
@@ -45,11 +64,14 @@ export const NewTask = () => {
       headerRight: () => (
         <TouchableOpacity
           onPress={() => {
-            handleAddTask(description, title)
+            params?.task
+              ? handleEditTask(description, title)
+              : handleAddTask(description, title)
           }}>
           <Text style={styles.rightButton}>{strings.saveButton}</Text>
         </TouchableOpacity>
       ),
+      title: params?.task ? strings.editTaskHeader : strings.newTaskHeader,
     })
   }, [navigation, description, title])
 

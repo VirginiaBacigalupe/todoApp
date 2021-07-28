@@ -19,11 +19,12 @@ export interface TaskType {
   id: string
   title: string
   description: string
-  isChecked: boolean
+  completed: boolean
 }
 
 export type SettingsStackParamsList = {
   [Routes.Details]: { task: TaskType }
+  [Routes.NewTask]: { task?: TaskType }
 }
 
 export const App = () => {

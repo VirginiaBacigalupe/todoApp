@@ -1,5 +1,5 @@
 import { useNavigation } from '@react-navigation/native'
-import React from 'react'
+import React, { useEffect } from 'react'
 import {
   FlatList,
   StyleSheet,
@@ -10,9 +10,11 @@ import {
 import { useDispatch } from 'react-redux'
 
 import { PinkButton } from '../../components/PinkButton'
+import { Spinner } from '../../components/Spinner'
 import { Routes } from '../../routes/Routes'
+import { store } from '../../store'
 import { useAppSelector } from '../../store/hooks'
-import { cleanCkeckedTodos } from '../../store/slices/todoSlice'
+import { deleteTodoItem, getTodoList } from '../../store/todos/actions'
 import { strings } from '../../strings'
 import { Color } from '../../styles/Color'
 import { ListItem } from './ListItem'
@@ -23,8 +25,15 @@ export const Home = () => {
 
   const taskItems = useAppSelector(state => state.todo.todoList)
 
+  useEffect(() => {
+    dispatch(getTodoList())
+  }, [])
+
   const hanldeClearAllSelectedTasks = () => {
-    dispatch(cleanCkeckedTodos())
+    const tasksToDelete = taskItems
+      .filter(task => task.completed)
+      .map(task => task.id)
+    dispatch(deleteTodoItem(tasksToDelete))
   }
 
   React.useLayoutEffect(() => {
@@ -40,8 +49,11 @@ export const Home = () => {
     })
   }, [navigation])
 
+  const isLoading = store.getState().todo.status === 'loading'
+
   return (
     <View style={styles.container}>
+      <Spinner loading={isLoading} />
       <FlatList
         ListEmptyComponent={
           <Text style={styles.inputTitle}>{strings.emptyListText}</Text>
