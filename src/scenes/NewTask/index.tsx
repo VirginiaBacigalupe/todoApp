@@ -1,5 +1,5 @@
 import { RouteProp, useNavigation, useRoute } from '@react-navigation/native'
-import React, { useEffect, useState } from 'react'
+import React, { useEffect } from 'react'
 import {
   KeyboardAvoidingView,
   Platform,
@@ -10,11 +10,12 @@ import {
 } from 'react-native'
 import { useDispatch } from 'react-redux'
 
-import { SettingsStackParamsList } from '..'
-import { Routes } from '../routes/Routes'
-import { addTodoItem, updateTodoItem } from '../store/todos/actions'
-import { strings } from '../strings'
-import { Color } from '../styles/Color'
+import { SettingsStackParamsList } from '../../index'
+import { Routes } from '../../routes/Routes'
+import { updateTodoItem } from '../../store/todos/actions'
+import { strings } from '../../strings'
+import { Color } from '../../styles/Color'
+import { useHandleAddTask } from './useHandleAddTask'
 
 export const NewTask: React.FunctionComponent = () => {
   const { params } =
@@ -23,19 +24,11 @@ export const NewTask: React.FunctionComponent = () => {
   const navigation = useNavigation()
   const dispatch = useDispatch()
 
-  const [description, setDescription] = useState('')
-  const [title, setTitle] = useState('')
+  const [description, setDescription] = React.useState('')
+  const [title, setTitle] = React.useState('')
 
   const handleCancel = () => {
     navigation.goBack()
-  }
-
-  const handleAddTask = (description: string, title: string) => {
-    if (description && title) {
-      const task = { description, title }
-      dispatch(addTodoItem(task))
-      navigation.goBack()
-    }
   }
 
   const handleEditTask = (description: string, title: string) => {
@@ -44,6 +37,8 @@ export const NewTask: React.FunctionComponent = () => {
       navigation.navigate(Routes.Home)
     }
   }
+
+  const { handleAddTask } = useHandleAddTask()
 
   useEffect(() => {
     if (params?.task) {
@@ -80,12 +75,14 @@ export const NewTask: React.FunctionComponent = () => {
       behavior={Platform.OS === 'ios' ? 'padding' : 'height'}
       style={styles.writeTaskWrapper}>
       <TextInput
+        testID="inputTitle"
         style={styles.inputTitle}
         placeholder={'Task title'}
         value={title}
         onChangeText={text => setTitle(text)}
       />
       <TextInput
+        testID="inputDescription"
         style={styles.inputDescription}
         placeholder={'Task description'}
         value={description}

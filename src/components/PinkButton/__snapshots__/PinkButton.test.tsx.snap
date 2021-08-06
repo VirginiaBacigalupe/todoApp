@@ -1,0 +1,25 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`PinkButton Pink button renders ok 1`] = `
+<ForwardRef
+  onPress={[MockFunction]}
+  style={
+    Object {
+      "alignItems": "center",
+    }
+  }
+>
+  <Text
+    style={
+      Object {
+        "alignItems": "center",
+        "color": "rgb(255, 25, 123)",
+        "fontWeight": "bold",
+        "margin": 20,
+      }
+    }
+  >
+    CLEAR ALL DONE
+  </Text>
+</ForwardRef>
+`;
