@@ -3,12 +3,12 @@ import React from 'react'
 import { StyleSheet, Text, TouchableOpacity, View } from 'react-native'
 import { useDispatch } from 'react-redux'
 
-import { SettingsStackParamsList, TaskType } from '..'
-import { PinkButton } from '../components/PinkButton'
-import { Routes } from '../routes/Routes'
-import { updateTodoItem } from '../store/todos/actions'
-import { strings } from '../strings'
-import { Color } from '../styles/Color'
+import { SettingsStackParamsList, TaskType } from '../..'
+import { PinkButton } from '../../components/PinkButton/index'
+import { Routes } from '../../routes/Routes'
+import { updateTodoItem } from '../../store/todos/actions'
+import { strings } from '../../strings'
+import { Color } from '../../styles/Color'
 
 export const Details: React.FunctionComponent = () => {
   const { params } =
@@ -41,11 +41,15 @@ export const Details: React.FunctionComponent = () => {
 
   return (
     <View style={styles.container}>
-      <Text style={styles.statusText}>
+      <Text testID="taskStatus" style={styles.statusText}>
         {params.task.completed ? strings.done : strings.notDone}
       </Text>
-      <Text style={styles.taskTitle}>{params.task.title}</Text>
-      <Text style={styles.taskDescription}>{params.task.description}</Text>
+      <Text testID="taskTitle" style={styles.taskTitle}>
+        {params.task.title}
+      </Text>
+      <Text testID="taskDescription" style={styles.taskDescription}>
+        {params.task.description}
+      </Text>
       <PinkButton
         title={
           params.task.completed ? strings.unMarkButton : strings.markButton

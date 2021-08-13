@@ -3,10 +3,10 @@ import React from 'react'
 import { TouchableOpacity } from 'react-native'
 import { useDispatch } from 'react-redux'
 
-import { TaskType } from '../..'
-import { Routes } from '../../routes/Routes'
-import { updateTodoItem } from '../../store/todos/actions'
-import { Task } from './Task'
+import { TaskType } from '../../..'
+import { Routes } from '../../../routes/Routes'
+import { updateTodoItem } from '../../../store/todos/actions'
+import { Task } from '../Task/index'
 
 interface Props {
   task: TaskType

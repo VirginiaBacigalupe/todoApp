@@ -9,15 +9,15 @@ import {
 } from 'react-native'
 import { useDispatch } from 'react-redux'
 
-import { PinkButton } from '../../components/PinkButton'
-import { Spinner } from '../../components/Spinner'
+import { PinkButton } from '../../components/PinkButton/index'
+import { Spinner } from '../../components/Spinner/index'
 import { Routes } from '../../routes/Routes'
 import { store } from '../../store'
 import { useAppSelector } from '../../store/hooks'
 import { deleteTodoItem, getTodoList } from '../../store/todos/actions'
 import { strings } from '../../strings'
 import { Color } from '../../styles/Color'
-import { ListItem } from './ListItem'
+import { ListItem } from './ListItem/index'
 
 export const Home = () => {
   const navigation = useNavigation()

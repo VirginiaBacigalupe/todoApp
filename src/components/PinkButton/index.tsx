@@ -1,7 +1,7 @@
 import React from 'react'
 import { StyleSheet, Text, TouchableOpacity } from 'react-native'
 
-import { Color } from '../styles/Color'
+import { Color } from '../../styles/Color'
 
 interface Props {
   title: string

@@ -1,0 +1,54 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`Details screen render ok 1`] = `
+<View
+  style={
+    Object {
+      "backgroundColor": "rgb(255, 255, 255)",
+      "padding": 15,
+    }
+  }
+>
+  <Text
+    style={
+      Object {
+        "color": "rgb(255, 25, 123)",
+        "margin": 10,
+        "marginBottom": 5,
+      }
+    }
+    testID="taskStatus"
+  >
+    Not done
+  </Text>
+  <Text
+    style={
+      Object {
+        "color": "rgb(0,0,0)",
+        "fontSize": 36,
+        "margin": 10,
+        "marginTop": 5,
+      }
+    }
+    testID="taskTitle"
+  >
+    tarea1
+  </Text>
+  <Text
+    style={
+      Object {
+        "color": "rgb(149, 149, 149)",
+        "fontSize": 14,
+        "margin": 10,
+      }
+    }
+    testID="taskDescription"
+  >
+    desc tarea 1
+  </Text>
+  <PinkButton
+    onPress={[Function]}
+    title="MARK AS DONE"
+  />
+</View>
+`;
